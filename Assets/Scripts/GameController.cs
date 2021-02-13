@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
 
     void SetGameControllerReferenceOnButtons ()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < buttonList.Length; i++)
 
         {            
             buttonList[i].GetComponentInParent<GridSpace>().SetGameControllerReference(this);
@@ -56,18 +56,60 @@ public class GameController : MonoBehaviour
     {   
 
         moveCount++;
-        for (int i = 0; i < 3; i++)
-            for(int j = 0; j < 3; j++)
-            {
-                ;
-            }
-        
-        if (moveCount >= 9)
+        if (buttonList [0].text == ShowActiveSide.text && buttonList [1].text == ShowActiveSide.text && buttonList [2].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [3].text == ShowActiveSide.text && buttonList [4].text == ShowActiveSide.text && buttonList [5].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [6].text == ShowActiveSide.text && buttonList [7].text == ShowActiveSide.text && buttonList [8].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [0].text == ShowActiveSide.text && buttonList [3].text == ShowActiveSide.text && buttonList [6].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [1].text == ShowActiveSide.text && buttonList [4].text == ShowActiveSide.text && buttonList [7].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [2].text == ShowActiveSide.text && buttonList [5].text == ShowActiveSide.text && buttonList [8].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [0].text == ShowActiveSide.text && buttonList [4].text == ShowActiveSide.text && buttonList [8].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (buttonList [2].text == ShowActiveSide.text && buttonList [4].text == ShowActiveSide.text && buttonList [6].text == ShowActiveSide.text)
+        {
+            GameOver(ShowActiveSide.text);
+            return 0;
+        }
+
+        else if (moveCount >= 9)
         {
             GameOver("draw");
             return 0;
         }
-        
+
         ChangeSides();
         return 0;
 
@@ -113,16 +155,16 @@ public class GameController : MonoBehaviour
         //Enabling AI
         //ai.enabled = true;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < buttonList.Length; i++)
         
         {
-            buttonList [i,j].text = "";
+            buttonList [i].text = "";
         }
     }
 
     void SetBoardInteractable (bool toggle)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < buttonList.Length; i++)
         
         {
             buttonList[i].GetComponentInParent<Button>().interactable = toggle;
