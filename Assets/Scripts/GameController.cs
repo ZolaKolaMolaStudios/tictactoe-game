@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {   
-    public Text[,] buttonGrid;
+    public Text[] buttonList;
     private string playerSide;
     public GameObject gameOverPanel;
     public Text gameOverText;
@@ -41,10 +41,10 @@ public class GameController : MonoBehaviour
     void SetGameControllerReferenceOnButtons ()
     {
         for (int i = 0; i < 3; i++)
-            for(int j = 0; j < 3; j++)
-            {            
-                buttonGrid[i,j].GetComponentInParent<GridSpace>().SetGameControllerReference(this);
-            }
+
+        {            
+            buttonList[i].GetComponentInParent<GridSpace>().SetGameControllerReference(this);
+        }
     }
 
     public string GetPlayerSide ()
@@ -114,19 +114,19 @@ public class GameController : MonoBehaviour
         //ai.enabled = true;
 
         for (int i = 0; i < 3; i++)
-            for(int j = 0; j < 3; j++)
-            {
-                buttonGrid [i,j].text = "";
-            }
+        
+        {
+            buttonList [i,j].text = "";
+        }
     }
 
     void SetBoardInteractable (bool toggle)
     {
         for (int i = 0; i < 3; i++)
-            for(int j = 0; j < 3; j++)
-            {
-                buttonGrid[i,j].GetComponentInParent<Button>().interactable = toggle;
-            }
+        
+        {
+            buttonList[i].GetComponentInParent<Button>().interactable = toggle;
+        }
     }
 
     public void SetPlayerSideX()

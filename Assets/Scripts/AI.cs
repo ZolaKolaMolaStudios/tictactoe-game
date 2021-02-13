@@ -61,7 +61,8 @@ public class AI : MonoBehaviour
     {
         //AI Goes here I guess
         if(!gameController.returnTurn())
-        {
+        {   
+            //easyai
             int value = Random.Range(0, 8);
             if (buttonList[value].GetComponentInParent<Button>().interactable == true)
             {
