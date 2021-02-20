@@ -7,6 +7,8 @@ public class AI : MonoBehaviour
 {   
     //Get grids
     public Text[] buttonList;
+    //AI Difficulty Select Value
+    string AISelect;
 
     //Button[,] buttonArray;
     //Button[,] activeButtons;
@@ -22,7 +24,7 @@ public class AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        GetGamemode();   
     }
 
     // void InitializeGrid()
@@ -61,18 +63,25 @@ public class AI : MonoBehaviour
     {
         //AI Goes here I guess
         if(!gameController.returnTurn())
-        {   
-            //easyai
-            int value = Random.Range(0, 8);
-            if (buttonList[value].GetComponentInParent<Button>().interactable == true)
+        {
+            if(AISelect == "EasyAI")
             {
-                buttonList[value].text = GetComputerSide();
-                buttonList[value].GetComponentInParent<Button>().interactable = false;
-                gameController.EndTurn();
+                //easyai
+                int value = Random.Range(0, 8);
+                if (buttonList[value].GetComponentInParent<Button>().interactable == true)
+                {
+                    buttonList[value].text = GetComputerSide();
+                    buttonList[value].GetComponentInParent<Button>().interactable = false;
+                    gameController.EndTurn();
+                }
+                else
+                {
+                    PlayTurn();
+                }
             }
-            else
+            else if(AISelect == "HardAI")
             {
-                PlayTurn();
+                Debug.Log("Hard AI under construction");
             }
         }
 
@@ -85,5 +94,10 @@ public class AI : MonoBehaviour
             return "O";
         else
             return "X";
+    }
+
+    void GetGamemode()
+    {
+        AISelect = gameController.GetGamemode();
     }
 }

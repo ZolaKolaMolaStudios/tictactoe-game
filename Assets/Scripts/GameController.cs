@@ -5,17 +5,19 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {   
-    public Text[] buttonList;
-    private string playerSide;
+    public Text[] buttonList;  // Referencing gridspaces
+    string playerSide; //Player selecting X or O
     public GameObject gameOverPanel;
     public Text gameOverText;
-    private int moveCount;
+    int moveCount; // To check draw conditions
     public GameObject restartButton;
     public Text ShowActiveSide;
     public GameObject selectSidePanel;
     public Animator SideSelectAnimator;
     bool playerTurn;
-    AI ai;
+    AI ai;  //Referencing AI Script
+    public MenuSelect select; //Referencing MainMenu Script
+    string Gamemode;
 
     // Start is called before the first frame update
     void Start()
@@ -138,10 +140,25 @@ public class GameController : MonoBehaviour
 
     public void ChangeSides ()
     {   
-        ShowActiveSide.text = (ShowActiveSide.text == "X") ? "O" : "X" ;
-        playerTurn = (playerTurn == true) ? false : true;
-        if(!playerTurn)
-            ai.PlayTurn();
+        //ShowActiveSide.text = (ShowActiveSide.text == "X") ? "O" : "X" ;
+        
+        if(Gamemode == "EasyAI" || Gamemode == "HardAI")
+        {
+            if(playerTurn)
+            {   
+                playerTurn = false;
+                ai.PlayTurn();
+            }
+            else
+            {
+                playerTurn = true;
+            }
+
+        }
+        else
+        {
+            playerSide = (playerSide == "X") ? "O" : "X" ;   
+        }
     }
 
     public void RestartGame ()
@@ -171,19 +188,13 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void SetPlayerSideX()
+    public void SetPlayerSide(string selectedPlayerSide)
     {
-        playerSide = "X";
+        playerSide = selectedPlayerSide;
         AfterSideSelect();
         //selectSidePanel.SetActive(false);
     }
 
-    public void SetPlayerSideY()
-    {
-        playerSide = "O";
-        AfterSideSelect();
-        //selectSidePanel.SetActive(false);
-    }
 
     void AfterSideSelect()
     {   
@@ -198,8 +209,17 @@ public class GameController : MonoBehaviour
     {
         return playerTurn;
     }
-    
-  
+
+    public void ReturnGamemode(string gamemode)
+    {
+        Gamemode = gamemode;
+        select.AfterGamemodeSelect();
+    }
+
+    public string GetGamemode()  // For the AI Script
+    {
+        return Gamemode;
+    }
 }
 
    
