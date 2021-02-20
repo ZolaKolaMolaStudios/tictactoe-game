@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class GameController : MonoBehaviour
 {   
@@ -18,6 +19,11 @@ public class GameController : MonoBehaviour
     AI ai;  //Referencing AI Script
     public MenuSelect select; //Referencing MainMenu Script
     string Gamemode;
+    public Text XScore,OScore; // To Show in Game
+    int XScoreInt,OScoreInt; // For the script. WIll be converted to string later. Might delete if not needed
+    public GameObject MainMenuPanel;
+    public GameObject AISelectMenu;  //Located in Main Menu. To be disabled at game start 
+    public CanvasGroup GameScreens;  //To be activated after gamemode select
 
     // Start is called before the first frame update
     void Start()
@@ -28,16 +34,20 @@ public class GameController : MonoBehaviour
 
     void Awake ()
     {   
+        BackToMainMenu(); // Start Main Menu on Game Start  
         selectSidePanel.SetActive(true);
         SetGameControllerReferenceOnButtons();
         gameOverPanel.SetActive(false);
         moveCount = 0;
         restartButton.SetActive(false);
+        XScoreInt = 0;
+        OScoreInt = 0; 
     }
 
     void Update()
     {
         ShowActiveSide.text = playerSide;
+        UpdateScore();     // Update Score at Game
     }
 
     void SetGameControllerReferenceOnButtons ()
@@ -121,14 +131,22 @@ public class GameController : MonoBehaviour
     {
         SetBoardInteractable(false);
 
-        //Disabling AI due to stackoverflowexception at game end. doesnt work
-        //ai.enabled = false;
-
         gameOverPanel.SetActive(true);
         if(winningPlayer == "draw")
             SetGameOverText("It's a draw");
         else
+        {   
+            if(ShowActiveSide.text == "X")
+            {
+                XScoreInt++;
+            }
+            else if(ShowActiveSide.text == "O")
+            {
+                OScoreInt++;
+            }
             SetGameOverText (ShowActiveSide.text + " Wins!");
+        }
+           
         restartButton.SetActive(true);
 
     }
@@ -140,8 +158,6 @@ public class GameController : MonoBehaviour
 
     public void ChangeSides ()
     {   
-        //ShowActiveSide.text = (ShowActiveSide.text == "X") ? "O" : "X" ;
-        
         if(Gamemode == "EasyAI" || Gamemode == "HardAI")
         {
             if(playerTurn)
@@ -169,8 +185,6 @@ public class GameController : MonoBehaviour
         restartButton.SetActive(false);
         SetBoardInteractable(true);
         playerTurn = true;
-        //Enabling AI
-        //ai.enabled = true;
 
         for (int i = 0; i < buttonList.Length; i++)
         
@@ -219,6 +233,27 @@ public class GameController : MonoBehaviour
     public string GetGamemode()  // For the AI Script
     {
         return Gamemode;
+    }
+
+    void UpdateScore()
+    {
+        XScore.text = Convert.ToString(XScoreInt); 
+        OScore.text = Convert.ToString(OScoreInt);   
+    }
+
+    public void BackToMainMenu()
+    {
+        //Reset Score
+        XScoreInt = 0;
+        OScoreInt = 0;
+
+        //Activate Main Menu
+        RestartGame();
+        GameScreens.alpha = 0;
+        MainMenuPanel.SetActive(true);   
+
+        //Init Main Menu
+        AISelectMenu.SetActive(false);
     }
 }
 
