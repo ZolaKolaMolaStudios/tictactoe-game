@@ -1,89 +1,110 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AI : MonoBehaviour
-{   
-    //Get grids
-    public Text[] buttonList;
+public class HardAI : MonoBehaviour
+{
+    //Serialize gridspaces
+    public Text[] gridButtons;
+    int Score;
 
-    //Button[,] buttonArray;
-    //Button[,] activeButtons;
-
+    //Get the buttons
     private GameController gameController;
 
-    // Start is called before the first frame update
-    void Start()
-    {   
-        gameController = GetComponent<GameController>();   
+    void Awake()
+    {
+        gameController = GetComponent<GameController>();  // To be edited out if not used
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    // void InitializeGrid()
-    // {
-    //     for(int i = 0; i < 9;i++)
-    //     {   
-    //         //Debug.Log("Running");   
-    //         for(int j = 0; j < 3; j++)
-    //         {   
-    //             //Debug.Log("Running 2");   
-    //             for(int k = 0; k < 3;k++)
-    //             {   
-    //                 //Debug.Log("Running 3");
-    //                 buttonArray[j,k] = buttonList[i];
-    //                 //Debug.Log("Running 4");
-    //             }
-    //         }
-    //     }       
-    // }
+    void MakeMove()
+    { }
 
-    // void GetActiveButtons()
-    // {
-    //     for(int i = 0; i < 3; i++)
-    //     {
-    //         for(int j = 0; j < 3; j++)
-    //         {
-    //             if(buttonArray[i,j].interactable == true) 
-    //             {
-    //                 activeButtons[i,j] = buttonArray[i,j];    
-    //             }
-    //         }
-    //     }
-    // }
+    void Minimax()
+    { }
 
-    public void PlayTurn()
+    int CheckWinCondition()   // return score if won
     {
-        //AI Goes here I guess
-        if(!gameController.returnTurn())
-        {   
-            //easyai
-            int value = Random.Range(0, 8);
-            if (buttonList[value].GetComponentInParent<Button>().interactable == true)
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
             {
-                buttonList[value].text = GetComputerSide();
-                buttonList[value].GetComponentInParent<Button>().interactable = false;
-                gameController.EndTurn();
-            }
-            else
-            {
-                PlayTurn();
+                //Vertical win
+                if (i == 0)
+                {
+                    if ((gridButtons[i + 3 * j] == gridButtons[i + 3 * j + 1]) && (gridButtons[i + 3 * j + 1] == gridButtons[i + 3 * j + 2])) // Take with a grain of salt
+                    {
+                        Score = EndCondition();
+                    }
+                }
+
+                //Horizontal win
+                else if ((i + 3*j) <= 9)
+                {
+                    if ((gridButtons[i + 3 * j] == gridButtons[i + 3 * j + 3]) && (gridButtons[i + 3 * j + 3] == gridButtons[i + 3 * j + 6])) //Review Stat
+                    {
+                        Score = EndCondition();
+                    }
+                }
+
+               //Diagonal win
+                else if (gridButtons[0] == gridButtons[4] && gridButtons[4] == gridButtons[8])
+                {
+                    Score = EndCondition();
+                }
+                else if (gridButtons[2] == gridButtons[4] && gridButtons[4] == gridButtons[6])
+                {
+                    Score = EndCondition();
+                }
             }
         }
-
     }
 
+
     string GetComputerSide()
-    {   
+    {
         string getPlayerSide = gameController.GetPlayerSide();
-        if(getPlayerSide == "X")
+        if (getPlayerSide == "X")
             return "O";
         else
             return "X";
     }
+
+
+    void EndCondition()
+    {
+        if (AISide != activeSide)
+        {
+            return 10;
+        }
+        else
+        {
+            return -10;
+        }
+    }
+
+    void GetAiSide()
+    {
+        //Code getting Ai side here
+    }
+
+    void GetSpaceIfEmpty()
+    {
+        if (buttonList[value].GetComponentInParent<Button>().interactable == true)
+        {
+            buttonList[value].text = GetComputerSide();
+            buttonList[value].GetComponentInParent<Button>().interactable = false;
+            gameController.EndTurn();
+        }
+        else
+        {
+            GetSpaceIfEmpty();
+        }
+    }
 }
+
